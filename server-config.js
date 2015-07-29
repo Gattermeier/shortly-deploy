@@ -1,6 +1,8 @@
 var express = require('express');
 var partials = require('express-partials');
 var util = require('./lib/utility');
+var config = require('./config.js').get(process.env.NODE_ENV);
+
 
 var handler = require('./lib/request-handler');
 
@@ -15,6 +17,7 @@ app.configure(function() {
   app.use(express.cookieParser('shhhh, very secret'));
   app.use(express.session());
 });
+app.locals({libScripts: config.libJS, clientScripts : config.clientJS, css: config.clientCSS});
 
 app.get('/', util.checkUser, handler.renderIndex);
 app.get('/create', util.checkUser, handler.renderIndex);

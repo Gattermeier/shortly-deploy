@@ -6,9 +6,13 @@ module.exports = function(grunt) {
       options: {
         separator: ';',
       },
+      lib: {
+        src: ['public/lib/**/*.js'],
+        dest: 'public/dist/lib.js',
+      },
       dist: {
-        src: ['public/client/**/*.js','public/lib/**/*.js'],
-        dest: 'dist/built.js',
+        src: ['public/client/**/*.js'],
+        dest: 'public/dist/built.js',
       }
     },
 
@@ -28,27 +32,37 @@ module.exports = function(grunt) {
     },
 
     uglify: {
-      files: {
-        'dist/built.min.js': ['dist/built.js']
+      lib: {
+        files: {
+          'public/dist/lib.min.js': ['public/dist/lib.js']
+        }
+      },
+      dist: {
+        files: {
+          'public/dist/built.min.js': ['public/dist/built.js']
+        }
       }
     },
 
     jshint: {
       files: [
-        'dist/built.min.js'
+        'public/dist/built.min.js'
       ],
       options: {
         force: 'true',
         jshintrc: '.jshintrc',
         ignores: [
-          'public/lib/**/*.js',
-          'public/dist/**/*.js'
+          'public/lib/**/*.js'
         ]
       }
     },
 
     cssmin: {
-        // Add filespec list here
+      dist: {
+        files: {
+          'public/style.min.css': ['public/style.css']
+        }
+      }
     },
 
     watch: {
