@@ -2,10 +2,13 @@ var request = require('supertest');
 var express = require('express');
 var expect = require('chai').expect;
 var app = require('../server-config.js');
+var mongoose = require('mongoose');
+var crypto = require('crypto');
 
-var db = require('../app/config');
-var User = require('../app/models/user');
-var Link = require('../app/models/link');
+
+var db = require('../mongo');
+var User = db.User;
+var Link = db.Link;
 
 /////////////////////////////////////////////////////
 // NOTE: these tests are designed for mongo!
@@ -15,17 +18,27 @@ describe('', function() {
 
   beforeEach(function(done) {
     // Log out currently signed in user
-    request(app)
-      .get('/logout')
-      .end(function(err, res) {
+    
+    mongoose.connect('mongodb://localhost:27017/shortly', function(err) {
+      if (err) {
+        throw err;
+      }
+      request(app)
+        .get('/logout')
+        .end(function(err, res) {
 
-        // Delete objects from db so they can be created later for the test
-        Link.remove({url : 'http://www.roflzoo.com/'}).exec();
-        User.remove({username : 'Savannah'}).exec();
-        User.remove({username : 'Phillip'}).exec();
+          // Delete objects from db so they can be created later for the test
+          Link.remove({url : 'http://www.roflzoo.com/'}).exec();
+          User.remove({username : 'Svnh'}).exec();
+          User.remove({username : 'Phillip'}).exec();
 
-        done();
-      });
+          done();
+        });
+    });
+  });
+
+  afterEach(function(done) {
+    mongoose.disconnect(done);
   });
 
   describe('Link creation: ', function() {
@@ -80,7 +93,7 @@ describe('', function() {
             Link.findOne({'url' : 'http://www.roflzoo.com/'})
               .exec(function(err,link){
                 if(err) console.log(err);
-                expect(link.title).to.equal('Rofl Zoo - Daily funny animal pictures');
+                expect(link.title).to.equal('Funny pictures of animals, funny dog pictures');
               });
           })
           .end(done);
@@ -91,10 +104,12 @@ describe('', function() {
     describe('With previously saved urls: ', function() {
 
       beforeEach(function(done) {
+        var code = crypto.createHash('sha1').update('http://www.roflzoo.com/').digest('hex').slice(0,5);
         link = new Link({
           url: 'http://www.roflzoo.com/',
-          title: 'Rofl Zoo - Daily funny animal pictures',
+          title: 'Funny pictures of animals, funny dog pictures',
           base_url: 'http://127.0.0.1:4568',
+          code: code,
           visits: 0
         })
 
@@ -105,6 +120,7 @@ describe('', function() {
 
       it('Returns the same shortened code if attempted to add the same URL twice', function(done) {
         var firstCode = link.code
+        console.log('firstCode:', firstCode);
         request(app)
           .post('/links')
           .send({
@@ -112,6 +128,7 @@ describe('', function() {
           .expect(200)
           .expect(function(res) {
             var secondCode = res.body.code;
+            console.log(res.body);
             expect(secondCode).to.equal(firstCode);
           })
           .end(done);
@@ -119,6 +136,7 @@ describe('', function() {
 
       it('Shortcode redirects to correct url', function(done) {
         var sha = link.code;
+        console.log(sha);
         request(app)
           .get('/' + sha)
           .expect(302)
@@ -245,3 +263,5 @@ describe('', function() {
   }); // Account Login
 
 });
+
+

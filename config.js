@@ -1,7 +1,4 @@
 var config = {
-  development: {
-
-  },
   production: {
     database: 'mongodb://MongoLab-3:TuLrlhLSrnMFEgqocNBGEX_M7DboVrHyyGzej_621Xg-@ds036638.mongolab.com:36638/MongoLab-3',
     libJS: [
