@@ -3,7 +3,7 @@ var config = {
 
   },
   production: {
-    database: '',
+    database: 'mongodb://MongoLab-3:TuLrlhLSrnMFEgqocNBGEX_M7DboVrHyyGzej_621Xg-@ds036638.mongolab.com:36638/MongoLab-3',
     libJS: [
       'dist/lib/jquery.min.js',
       'dist/lib/underscore.min.js',
