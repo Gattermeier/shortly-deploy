@@ -114,9 +114,6 @@ module.exports = function(grunt) {
     grunt.task.run([ 'watch' ]);
   });
 
-  grunt.registerTask('server-production', function(target){
-
-  });
 
   ////////////////////////////////////////////////////
   // Main grunt tasks
@@ -130,14 +127,14 @@ module.exports = function(grunt) {
   grunt.registerTask('build', [
     'uglify',
     'concat',
-    'cssmin',
-    'test'
+    'cssmin'
   ]);
 
   grunt.registerTask('upload', function(n) {
     if(grunt.option('prod')) {
       // add your production server task here
-      // grunt.task.run(['server-production']);
+      // upload files to Azure
+      // git push azure master
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
@@ -145,6 +142,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('deploy', [
       // add your production server task here
+      'test',
+      'upload'
   ]);
 
 
