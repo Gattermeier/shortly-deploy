@@ -3,7 +3,7 @@ var config = {
 
   },
   production: {
-    database: {},
+    database: '',
     libJS: [
       'dist/lib/jquery.min.js',
       'dist/lib/underscore.min.js',
@@ -16,7 +16,7 @@ var config = {
     clientCSS: 'style.min.css'
   },
   default: {
-    database: {},
+    database: 'mongodb://localhost:27017/shortly',
     libJS: [
       '/lib/jquery.js',
       '/lib/underscore.js',
