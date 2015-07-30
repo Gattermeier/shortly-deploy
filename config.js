@@ -5,10 +5,10 @@ var config = {
   production: {
     database: {},
     libJS: [
-      '/lib/jquery.js',
-      '/lib/underscore.js',
-      '/lib/backbone.js',
-      '/lib/handlebars.js'
+      'dist/lib/jquery.min.js',
+      'dist/lib/underscore.min.js',
+      'dist/lib/backbone.min.js',
+      'dist/lib/handlebars.min.js'
     ],
     clientJS: [
       '/dist/built.min.js'

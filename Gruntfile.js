@@ -2,20 +2,36 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    uglify: {
+      lib: {
+        files: [{
+          expand: true,
+          cwd: 'public/lib/',
+          src: '*.js',
+          dest: 'public/dist/lib/',
+          ext: '.min.js'
+        }]
+      },
+      dist: {
+        files: [{
+          expand: true,
+          cwd: 'public/client/',
+          src: '*.js',
+          dest: 'public/dist/client/',
+          ext: '.min.js'
+        }]
+      }
+    },
+
     concat: {
       options: {
         separator: ';',
       },
-      lib: {
-        src: ['public/lib/**/*.js'],
-        dest: 'public/dist/lib.js',
-      },
       dist: {
-        src: ['public/client/**/*.js'],
-        dest: 'public/dist/built.js',
+        src: ['public/dist/client/**/*.js'],
+        dest: 'public/dist/built.min.js',
       }
     },
-
     mochaTest: {
       test: {
         options: {
@@ -31,18 +47,6 @@ module.exports = function(grunt) {
       }
     },
 
-    uglify: {
-      lib: {
-        files: {
-          'public/dist/lib.min.js': ['public/dist/lib.js']
-        }
-      },
-      dist: {
-        files: {
-          'public/dist/built.min.js': ['public/dist/built.js']
-        }
-      }
-    },
 
     jshint: {
       files: [
@@ -72,8 +76,8 @@ module.exports = function(grunt) {
           'public/lib/**/*.js',
         ],
         tasks: [
-          'concat',
-          'uglify'
+          'uglify',
+          'concat'
         ]
       },
       css: {
@@ -124,8 +128,8 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
-    'concat',
     'uglify',
+    'concat',
     'cssmin',
     'test'
   ]);
